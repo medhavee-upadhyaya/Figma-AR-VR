@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1440">
+<title>SENSEVEIL — Neural AR Wellness System</title>
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --calm: #2D1B69;
+  --teal: #0D9488;
+  --teal-l: #2DD4BF;
+  --violet: #7C3AED;
+  --violet-l: #A78BFA;
+  --gold: #D97706;
+  --gold-l: #FCD34D;
+  --amber: #EA580C;
+  --amber-l: #FB923C;
+  --coral: #DC2626;
+  --coral-l: #F87171;
+  --indigo: #4338CA;
+  --indigo-l: #818CF8;
+  --purple-l: #C084FC;
+  --bg: #050509;
+  --glass: rgba(255,255,255,0.055);
+  --glass-b: rgba(255,255,255,0.1);
+  --glass-thick: rgba(18,18,36,0.82);
+  --t1: rgba(255,255,255,0.92);
+  --t2: rgba(255,255,255,0.55);
+  --t3: rgba(255,255,255,0.3);
+  --t4: rgba(255,255,255,0.15);
+}
+
+body {
+  background: #020208;
+  font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', BlinkMacSystemFont, system-ui, sans-serif;
+  color: var(--t1);
+  padding: 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  width: 1568px;
+}
+
+.frame-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  margin-bottom: 16px;
+}
+
+.screen {
+  width: 1440px;
+  height: 900px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  flex-shrink: 0;
+}
+
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid var(--glass-b);
+  border-radius: 20px;
+}
+
+.glass-thick {
+  background: var(--glass-thick);
+  backdrop-filter: blur(60px) saturate(200%);
+  -webkit-backdrop-filter: blur(60px) saturate(200%);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 24px;
+}
+
+.glass-thin {
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+}
+
+@keyframes pulse {
+  0%,100% { opacity:.65; transform:scale(1); }
+  50% { opacity:1; transform:scale(1.06); }
+}
+@keyframes float {
+  0%,100% { transform:translateY(0); }
+  50% { transform:translateY(-14px); }
+}
+@keyframes shimmer {
+  0%,100% { opacity:.25; }
+  50% { opacity:.75; }
+}
+@keyframes spin-slow {
+  from { transform:rotate(0deg); }
+  to { transform:rotate(360deg); }
+}
+@keyframes ring-breathe {
+  0%,100% { opacity:.5; transform:scale(1); }
+  50% { opacity:.9; transform:scale(1.04); }
+}
+@keyframes drift1 {
+  0%,100% { transform:translate(0,0); }
+  50% { transform:translate(24px,-18px); }
+}
+@keyframes drift2 {
+  0%,100% { transform:translate(0,0); }
+  50% { transform:translate(-20px,22px); }
+}
+@keyframes drift3 {
+  0%,100% { transform:translate(0,0); }
+  50% { transform:translate(16px,20px); }
+}
+
+/* ─────────────────────────────────────────
+   SCREEN 1 — WELCOME PORTAL
+───────────────────────────────────────── */
+.s1 {
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 105%, #1E0B4A 0%, #100630 45%, #070514 70%, #050509 100%),
+    radial-gradient(ellipse 40% 40% at 70% 20%, rgba(99,66,179,0.18) 0%, transparent 60%);
+}
+
+.s1-particles { position:absolute; inset:0; pointer-events:none; }
+.s1-p {
+  position:absolute;
+  border-radius:50%;
+  background:rgba(160,120,255,0.55);
+  animation: shimmer var(--d) ease-in-out infinite;
+  animation-delay: var(--dl);
+}
+
+.s1-glow {
+  position:absolute;
+  top:48%; left:50%;
+  transform:translate(-50%,-50%);
+  width:600px; height:600px;
+  border-radius:50%;
+  background: radial-gradient(circle, rgba(110,60,220,0.22) 0%, transparent 70%);
+  animation: pulse 6s ease-in-out infinite;
+}
+
+.s1-content {
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-52%);
+  text-align:center;
+  z-index:10;
+  display:flex; flex-direction:column; align-items:center;
+}
+
+.s1-eyebrow {
+  font-size:11px; font-weight:600; letter-spacing:.2em;
+  text-transform:uppercase; color:rgba(160,120,255,0.6);
+  margin-bottom:24px;
+}
+
+.wordmark {
+  font-size:80px; font-weight:700; letter-spacing:.18em;
+  background:linear-gradient(140deg, #C084FC 0%, #818CF8 40%, #38BDF8 80%, #C084FC 100%);
+  background-size:200% 200%;
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  margin-bottom:20px; line-height:1;
+}
+
+.tagline {
+  font-size:22px; font-weight:300;
+  color:rgba(255,255,255,0.65); letter-spacing:.02em; margin-bottom:6px;
+}
+
+.sub-tagline {
+  font-size:13px; color:rgba(255,255,255,0.28);
+  letter-spacing:.12em; text-transform:uppercase; margin-bottom:52px;
+}
+
+.s1-cta {
+  display:inline-flex; align-items:center; gap:12px;
+  padding:16px 44px;
+  background:rgba(110,60,220,0.18);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(160,120,255,0.35);
+  border-radius:100px;
+  font-size:16px; font-weight:500; color:rgba(255,255,255,0.88);
+  letter-spacing:.03em;
+}
+
+.s1-cta-icon {
+  width:18px; height:18px; border:1.5px solid rgba(255,255,255,0.6);
+  border-left:none; border-bottom:none; transform:rotate(45deg);
+}
+
+.s1-badges {
+  position:absolute; bottom:44px; left:50%; transform:translateX(-50%);
+  display:flex; gap:20px;
+}
+
+.s1-badge {
+  padding:8px 20px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:100px;
+  font-size:11px; color:rgba(255,255,255,0.28);
+  letter-spacing:.1em; text-transform:uppercase;
+}
+
+/* ─────────────────────────────────────────
+   SCREEN 2 — CALIBRATION CHAMBER
+───────────────────────────────────────── */
+.s2 {
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, #0A0720 0%, #050509 70%);
+}
+
+.s2-steps {
+  position:absolute; top:48px; left:50%; transform:translateX(-50%);
+  display:flex; gap:8px; align-items:center;
+}
+
+.s2-step {
+  width:32px; height:3px; border-radius:2px;
+  background:rgba(255,255,255,0.12);
+}
+.s2-step.active { background:rgba(160,120,255,0.8); width:48px; }
+.s2-step.done { background:rgba(160,120,255,0.4); }
+
+.s2-title {
+  position:absolute; top:80px; left:50%; transform:translateX(-50%);
+  text-align:center;
+}
+
+.s2-title h2 {
+  font-size:28px; font-weight:600; letter-spacing:-.01em; margin-bottom:6px;
+}
+
+.s2-title p {
+  font-size:14px; color:var(--t3); letter-spacing:.06em; text-transform:uppercase;
+}
+
+.s2-orb-wrap {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-52%);
+  display:flex; flex-direction:column; align-items:center;
+  animation: float 5s ease-in-out infinite;
+}
+
+.s2-ring-outer {
+  width:320px; height:320px; border-radius:50%;
+  border:1px solid rgba(160,120,255,0.12);
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  animation: ring-breathe 5s ease-in-out infinite;
+}
+
+.s2-ring-mid {
+  width:240px; height:240px; border-radius:50%;
+  border:1px solid rgba(160,120,255,0.2);
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  animation: ring-breathe 5s ease-in-out infinite .5s;
+}
+
+.s2-orb {
+  width:140px; height:140px; border-radius:50%;
+  background:radial-gradient(circle at 38% 35%, rgba(200,160,255,0.9), rgba(100,60,200,0.8) 55%, rgba(40,20,100,0.95) 100%);
+  box-shadow:0 0 60px rgba(140,80,240,0.5), 0 0 120px rgba(100,40,200,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+  animation: pulse 4s ease-in-out infinite;
+  position:relative; z-index:2;
+}
+
+.s2-label {
+  margin-top:180px; text-align:center; z-index:3; position:relative;
+}
+
+.s2-stimulus {
+  font-size:12px; font-weight:600; letter-spacing:.18em;
+  text-transform:uppercase; color:rgba(160,120,255,0.7);
+  margin-bottom:10px;
+}
+
+.s2-stimulus-name {
+  font-size:20px; font-weight:300; color:rgba(255,255,255,0.8);
+}
+
+.s2-wave {
+  margin-top:32px; width:360px; height:48px;
+}
+
+.s2-listening {
+  margin-top:24px; font-size:12px; color:var(--t3);
+  letter-spacing:.08em;
+}
+
+.s2-dot { display:inline-block; width:5px; height:5px; border-radius:50%; background:rgba(160,120,255,0.6); margin-left:4px; animation:shimmer 1.4s ease-in-out infinite; }
+.s2-dot:nth-child(2) { animation-delay:.3s; }
+.s2-dot:nth-child(3) { animation-delay:.6s; }
+
+/* ─────────────────────────────────────────
+   SCREEN 3 — SENSORY PROFILE REVEAL
+───────────────────────────────────────── */
+.s3 {
+  background: radial-gradient(ellipse 80% 60% at 40% 50%, #0D0720 0%, #070512 60%, #050509 100%);
+}
+
+.s3-header {
+  position:absolute; top:56px; left:72px;
+}
+.s3-header h1 { font-size:13px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:rgba(160,120,255,0.6); margin-bottom:10px; }
+.s3-header h2 { font-size:40px; font-weight:700; letter-spacing:-.02em; }
+.s3-header p { font-size:16px; font-weight:300; color:var(--t2); margin-top:6px; }
+
+.s3-chart-wrap {
+  position:absolute; top:50%; left:38%;
+  transform:translate(-50%,-50%);
+}
+
+.s3-stats {
+  position:absolute; right:72px; top:50%; transform:translateY(-50%);
+  width:340px; display:flex; flex-direction:column; gap:12px;
+}
+
+.s3-stat-row {
+  display:flex; align-items:center; gap:14px;
+  padding:14px 18px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:14px;
+}
+
+.s3-stat-dot {
+  width:10px; height:10px; border-radius:50%; flex-shrink:0;
+}
+
+.s3-stat-info { flex:1; }
+.s3-stat-name { font-size:13px; font-weight:500; color:var(--t2); }
+.s3-stat-bar-wrap { margin-top:6px; height:3px; background:rgba(255,255,255,0.08); border-radius:2px; overflow:hidden; }
+.s3-stat-bar { height:100%; border-radius:2px; }
+
+.s3-stat-val { font-size:20px; font-weight:600; font-variant-numeric:tabular-nums; }
+
+.s3-complete {
+  position:absolute; bottom:56px; left:72px;
+  padding:10px 24px;
+  background:rgba(45,212,191,0.12);
+  border:1px solid rgba(45,212,191,0.25);
+  border-radius:100px;
+  font-size:12px; font-weight:600; color:#2DD4BF;
+  letter-spacing:.1em; text-transform:uppercase;
+  display:flex; align-items:center; gap:8px;
+}
+.s3-check { width:14px; height:14px; border-radius:50%; background:#2DD4BF; display:flex; align-items:center; justify-content:center; }
+.s3-check::after { content:''; width:7px; height:4px; border-left:1.5px solid #000; border-bottom:1.5px solid #000; transform:rotate(-45deg) translateY(-1px); display:block; }
+
+/* ─────────────────────────────────────────
+   SCREEN 4 — LIVE AR FIELD (HERO)
+───────────────────────────────────────── */
+.s4 {
+  background:
+    linear-gradient(180deg, #030308 0%, #060812 30%, #080a18 60%, #060610 100%);
+}
+
+.s4-env {
+  position:absolute; bottom:0; left:0; right:0; height:320px;
+  background:linear-gradient(180deg, transparent 0%, rgba(6,8,20,0.6) 60%, rgba(6,8,20,0.9) 100%);
+}
+
+.s4-grid {
+  position:absolute; bottom:0; left:0; right:0; height:200px;
+  background:
+    linear-gradient(rgba(99,66,179,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99,66,179,0.06) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 50%, black 100%);
+  -webkit-mask-image:linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 50%, black 100%);
+}
+
+.s4-hud-top {
+  position:absolute; top:0; left:0; right:0;
+  padding:28px 40px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+
+.s4-logo {
+  font-size:13px; font-weight:700; letter-spacing:.2em; color:rgba(255,255,255,0.4);
+}
+
+.s4-coherence-badge {
+  display:flex; align-items:center; gap:16px;
+  padding:12px 20px;
+  background:rgba(220,38,38,0.15);
+  border:1px solid rgba(220,38,38,0.3);
+  border-radius:100px;
+}
+.s4-coh-label { font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:rgba(248,113,113,0.8); }
+.s4-coh-score { font-size:32px; font-weight:700; color:#F87171; font-variant-numeric:tabular-nums; line-height:1; }
+.s4-coh-unit { font-size:11px; color:rgba(248,113,113,0.5); }
+
+.s4-time {
+  font-size:14px; font-weight:300; color:var(--t3); letter-spacing:.06em;
+}
+
+.s4-field {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-54%);
+}
+
+.s4-body-silhouette {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:80px; height:200px;
+  border-radius:40px 40px 20px 20px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.06);
+  z-index:2;
+}
+
+.s4-predictive {
+  position:absolute; top:148px; left:50%;
+  transform:translateX(-50%);
+  padding:10px 28px;
+  background:rgba(234,88,12,0.15);
+  border:1px solid rgba(234,88,12,0.3);
+  border-radius:100px;
+  font-size:13px; font-weight:500; color:#FB923C;
+  white-space:nowrap;
+  animation:shimmer 3s ease-in-out infinite;
+}
+
+.s4-quick-actions {
+  position:absolute; bottom:72px; left:50%;
+  transform:translateX(-50%);
+  display:flex; gap:12px;
+}
+
+.s4-qa {
+  padding:10px 22px;
+  background:var(--glass);
+  backdrop-filter:blur(24px);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:100px;
+  font-size:13px; font-weight:500; color:var(--t2);
+  letter-spacing:.04em;
+}
+.s4-qa.active {
+  background:rgba(67,56,202,0.25);
+  border-color:rgba(129,140,248,0.35);
+  color:#A5B4FC;
+}
+
+.s4-hotspot {
+  position:absolute;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+}
+.s4-hs-dot {
+  width:10px; height:10px; border-radius:50%;
+  box-shadow:0 0 12px currentColor;
+  animation:pulse 3s ease-in-out infinite;
+}
+.s4-hs-label {
+  padding:5px 12px;
+  background:rgba(0,0,0,0.5);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:8px;
+  font-size:10px; font-weight:500; color:var(--t2);
+  white-space:nowrap; letter-spacing:.04em;
+}
+
+.s4-status-panel {
+  position:absolute; right:40px; top:50%; transform:translateY(-50%);
+  width:230px; display:flex; flex-direction:column; gap:8px;
+}
+
+.s4-dim-row {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 14px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:12px;
+}
+.s4-dim-color { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.s4-dim-name { flex:1; font-size:11px; color:var(--t2); letter-spacing:.02em; }
+.s4-dim-val { font-size:13px; font-weight:600; font-variant-numeric:tabular-nums; }
+
+/* ─────────────────────────────────────────
+   SCREEN 5 — DEEP INSPECTION
+───────────────────────────────────────── */
+.s5 {
+  background:radial-gradient(ellipse 100% 80% at 50% 110%, #0C0820 0%, #060510 60%, #040408 100%);
+}
+
+.s5-header {
+  position:absolute; top:52px; left:72px; right:72px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.s5-header h2 { font-size:32px; font-weight:700; letter-spacing:-.02em; }
+.s5-header p { font-size:13px; color:var(--t3); margin-top:4px; letter-spacing:.04em; }
+
+.s5-close {
+  width:36px; height:36px; border-radius:50%;
+  background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1);
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; color:var(--t2);
+}
+
+.s5-layers {
+  position:absolute; left:72px; top:170px; bottom:72px;
+  width:300px; display:flex; flex-direction:column; gap:10px; overflow:hidden;
+}
+
+.s5-layer {
+  display:flex; align-items:center; gap:14px;
+  padding:16px 18px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:14px; cursor:pointer;
+}
+.s5-layer.active {
+  background:rgba(99,66,179,0.18);
+  border-color:rgba(160,120,255,0.3);
+}
+.s5-layer-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.s5-layer-info { flex:1; }
+.s5-layer-name { font-size:14px; font-weight:500; color:var(--t1); }
+.s5-layer-val { font-size:12px; color:var(--t3); margin-top:3px; }
+.s5-layer-toggle {
+  width:32px; height:18px; border-radius:9px;
+  background:rgba(255,255,255,0.1);
+  position:relative;
+}
+.s5-layer-toggle.on { background:rgba(99,66,179,0.7); }
+.s5-layer-toggle::after {
+  content:''; position:absolute;
+  width:14px; height:14px; border-radius:50%;
+  background:white; top:2px; left:2px;
+  transition:left .2s;
+}
+.s5-layer-toggle.on::after { left:16px; }
+
+.s5-detail {
+  position:absolute; left:400px; right:72px; top:170px; bottom:72px;
+}
+
+.s5-viz {
+  width:100%; height:400px; border-radius:20px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.07);
+  overflow:hidden; position:relative;
+  margin-bottom:16px;
+}
+
+.s5-viz-label {
+  position:absolute; top:20px; left:24px;
+  font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+  color:rgba(139,92,246,0.7);
+}
+
+.s5-insights {
+  display:grid; grid-template-columns:1fr 1fr; gap:12px;
+}
+
+.s5-insight {
+  padding:16px 20px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:14px;
+}
+.s5-insight-label { font-size:11px; color:var(--t3); letter-spacing:.06em; text-transform:uppercase; margin-bottom:6px; }
+.s5-insight-val { font-size:22px; font-weight:600; }
+.s5-insight-desc { font-size:12px; color:var(--t3); margin-top:4px; }
+
+/* ─────────────────────────────────────────
+   SCREEN 6 — MODULATION STUDIO
+───────────────────────────────────────── */
+.s6 {
+  background:radial-gradient(ellipse 70% 50% at 50% 80%, #071420 0%, #050810 50%, #040408 100%);
+}
+
+.s6-header {
+  position:absolute; top:52px; left:72px;
+}
+.s6-header h2 { font-size:36px; font-weight:700; letter-spacing:-.02em; }
+.s6-header p { font-size:14px; color:var(--t3); margin-top:6px; }
+
+.s6-grid {
+  position:absolute; left:72px; right:72px; top:160px; bottom:72px;
+  display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:1fr 1fr;
+  gap:16px;
+}
+
+.s6-card {
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:20px;
+  padding:24px;
+  display:flex; flex-direction:column; gap:12px;
+  position:relative; overflow:hidden;
+}
+.s6-card.active {
+  background:rgba(15,148,136,0.1);
+  border-color:rgba(45,212,191,0.25);
+}
+.s6-card.active-2 {
+  background:rgba(67,56,202,0.1);
+  border-color:rgba(129,140,248,0.25);
+}
+
+.s6-card-glow {
+  position:absolute; top:-40px; right:-40px;
+  width:160px; height:160px; border-radius:50%;
+  opacity:.3; filter:blur(40px);
+}
+
+.s6-card-icon {
+  width:44px; height:44px; border-radius:14px;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.1);
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px;
+}
+
+.s6-card-title { font-size:16px; font-weight:600; }
+.s6-card-desc { font-size:12px; color:var(--t3); line-height:1.5; flex:1; }
+
+.s6-slider-wrap { display:flex; align-items:center; gap:10px; }
+.s6-slider-label { font-size:10px; color:var(--t3); letter-spacing:.08em; flex-shrink:0; }
+.s6-slider {
+  flex:1; height:4px; border-radius:2px;
+  background:rgba(255,255,255,0.1);
+  position:relative;
+}
+.s6-slider-fill { height:100%; border-radius:2px; }
+.s6-slider-val { font-size:12px; font-weight:600; font-variant-numeric:tabular-nums; flex-shrink:0; }
+
+.s6-toggle-row { display:flex; align-items:center; justify-content:space-between; }
+.s6-toggle-label { font-size:11px; color:var(--t3); }
+.s6-pill {
+  padding:4px 12px; border-radius:100px;
+  font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+}
+.s6-pill.on { background:rgba(45,212,191,0.15); color:#2DD4BF; border:1px solid rgba(45,212,191,0.25); }
+.s6-pill.off { background:rgba(255,255,255,0.05); color:var(--t3); border:1px solid rgba(255,255,255,0.08); }
+
+/* ─────────────────────────────────────────
+   SCREEN 7 — TIMELINE REPLAY
+───────────────────────────────────────── */
+.s7 {
+  background:radial-gradient(ellipse 80% 60% at 50% 50%, #08060F 0%, #040408 80%);
+}
+
+.s7-header {
+  position:absolute; top:52px; left:72px; right:72px;
+  display:flex; align-items:flex-end; justify-content:space-between;
+}
+.s7-header h2 { font-size:36px; font-weight:700; letter-spacing:-.02em; }
+.s7-header p { font-size:14px; color:var(--t3); margin-top:6px; }
+
+.s7-date {
+  font-size:13px; color:var(--t3); letter-spacing:.08em;
+  text-transform:uppercase; text-align:right;
+}
+.s7-date span { display:block; font-size:20px; font-weight:600; color:var(--t2); letter-spacing:0; margin-top:4px; }
+
+.s7-canvas {
+  position:absolute; left:72px; right:72px; top:170px; height:440px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.05);
+  border-radius:20px; overflow:hidden;
+}
+
+.s7-insights {
+  position:absolute; left:72px; right:72px; bottom:48px;
+  display:flex; gap:16px;
+}
+
+.s7-insight-chip {
+  flex:1; padding:14px 18px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:14px;
+}
+.s7-ic-label { font-size:10px; color:var(--t3); letter-spacing:.1em; text-transform:uppercase; margin-bottom:6px; }
+.s7-ic-text { font-size:13px; color:var(--t2); line-height:1.4; }
+
+/* ─────────────────────────────────────────
+   SCREEN 8 — COLLECTIVE MODE
+───────────────────────────────────────── */
+.s8 {
+  background:radial-gradient(ellipse 90% 70% at 50% 50%, #0A0C1A 0%, #060810 60%, #040408 100%);
+}
+
+.s8-header {
+  position:absolute; top:52px; left:72px; right:72px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.s8-header h2 { font-size:36px; font-weight:700; letter-spacing:-.02em; }
+.s8-header p { font-size:14px; color:var(--t3); margin-top:6px; }
+
+.s8-group-score {
+  padding:16px 28px;
+  background:rgba(45,212,191,0.1);
+  border:1px solid rgba(45,212,191,0.2);
+  border-radius:20px; text-align:right;
+}
+.s8-gs-label { font-size:11px; color:rgba(45,212,191,0.6); letter-spacing:.12em; text-transform:uppercase; margin-bottom:4px; }
+.s8-gs-val { font-size:42px; font-weight:700; color:#2DD4BF; line-height:1; }
+.s8-gs-sub { font-size:12px; color:rgba(45,212,191,0.5); margin-top:4px; }
+
+.s8-field {
+  position:absolute; left:50%; top:52%; transform:translate(-50%,-50%);
+}
+
+.s8-grid-bottom {
+  position:absolute; bottom:72px; left:72px; right:72px;
+  display:grid; grid-template-columns:repeat(4,1fr); gap:14px;
+}
+
+.s8-metric {
+  padding:18px 20px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:16px;
+}
+.s8-m-label { font-size:11px; color:var(--t3); letter-spacing:.08em; text-transform:uppercase; margin-bottom:8px; }
+.s8-m-val { font-size:26px; font-weight:700; line-height:1; margin-bottom:4px; }
+.s8-m-desc { font-size:12px; color:var(--t3); }
+
+.s8-rec {
+  position:absolute; right:72px; top:170px; width:280px;
+}
+.s8-rec-title { font-size:12px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--t3); margin-bottom:14px; }
+.s8-rec-item {
+  display:flex; align-items:flex-start; gap:10px;
+  padding:12px 16px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:12px; margin-bottom:8px;
+}
+.s8-rec-dot { width:6px; height:6px; border-radius:50%; margin-top:5px; flex-shrink:0; }
+.s8-rec-text { font-size:12px; color:var(--t2); line-height:1.5; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 1 — WELCOME PORTAL
+════════════════════════════════════════════ -->
+<div>
+<div class="frame-label">01 — Welcome Portal</div>
+<div class="screen s1">
+  <!-- ambient particles -->
+  <div class="s1-particles" id="particles1"></div>
+  <div class="s1-glow"></div>
+
+  <!-- large ambient ring decorations -->
+  <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 1440 900">
+    <circle cx="720" cy="450" r="320" fill="none" stroke="rgba(140,80,255,0.06)" stroke-width="1"/>
+    <circle cx="720" cy="450" r="430" fill="none" stroke="rgba(140,80,255,0.04)" stroke-width="1"/>
+    <circle cx="720" cy="450" r="540" fill="none" stroke="rgba(140,80,255,0.025)" stroke-width="1"/>
+  </svg>
+
+  <div class="s1-content">
+    <div class="s1-eyebrow">Neural · AR · Wellness System</div>
+    <div class="wordmark">SENSEVEIL</div>
+    <div class="tagline">See what your senses are carrying.</div>
+    <div class="sub-tagline">visionOS · Neural Interface · Spatial UI</div>
+    <div class="s1-cta">
+      Begin Calibration
+      <span class="s1-cta-icon"></span>
+    </div>
+  </div>
+
+  <div class="s1-badges">
+    <div class="s1-badge">visionOS</div>
+    <div class="s1-badge">Neural Interface</div>
+    <div class="s1-badge">8 Sensory Dimensions</div>
+    <div class="s1-badge">Real-time Modulation</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 2 — CALIBRATION CHAMBER
+════════════════════════════════════════════ -->
+<div>
+<div class="frame-label">02 — Baseline Calibration Chamber</div>
+<div class="screen s2">
+  <div class="s2-steps">
+    <div class="s2-step done"></div>
+    <div class="s2-step active"></div>
+    <div class="s2-step"></div>
+    <div class="s2-step"></div>
+    <div class="s2-step"></div>
+  </div>
+
+  <div class="s2-title">
+    <h2>Baseline Calibration</h2>
+    <p>Step 2 of 5 &nbsp;·&nbsp; Auditory Stimulus</p>
+  </div>
+
+  <!-- ambient glow behind orb -->
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-54%);width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(110,60,220,0.14) 0%,transparent 70%);"></div>
+
+  <div class="s2-orb-wrap" style="position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);">
+    <div style="position:relative;width:140px;height:140px;display:flex;align-items:center;justify-content:center;">
+      <div class="s2-ring-outer"></div>
+      <div class="s2-ring-mid"></div>
+      <div class="s2-orb"></div>
+    </div>
+
+    <div class="s2-label">
+      <div class="s2-stimulus">Current Stimulus</div>
+      <div class="s2-stimulus-name">Soft Ambient Tone — 432 Hz</div>
+
+      <svg class="s2-wave" viewBox="0 0 360 48">
+        <path d="M0 24 Q20 8 40 24 Q60 40 80 24 Q100 8 120 24 Q140 40 160 24 Q180 8 200 24 Q220 40 240 24 Q260 8 280 24 Q300 40 320 24 Q340 8 360 24" fill="none" stroke="rgba(160,120,255,0.4)" stroke-width="1.5"/>
+        <path d="M0 24 Q15 14 30 24 Q45 34 60 24 Q75 14 90 24 Q105 34 120 24 Q135 14 150 24 Q165 34 180 24 Q195 14 210 24 Q225 34 240 24 Q255 14 270 24 Q285 34 300 24 Q315 14 330 24 Q345 34 360 24" fill="none" stroke="rgba(160,120,255,0.2)" stroke-width="1"/>
+      </svg>
+
+      <div class="s2-listening">
+        Listening to neural response
+        <span class="s2-dot"></span>
+        <span class="s2-dot"></span>
+        <span class="s2-dot"></span>
+      </div>
+
+      <div style="margin-top:20px;font-size:11px;color:rgba(255,255,255,0.18);letter-spacing:.08em;">No input required — the system learns from you</div>
+    </div>
+  </div>
+
+  <!-- bottom navigation hint -->
+  <div style="position:absolute;bottom:44px;left:50%;transform:translateX(-50%);display:flex;gap:20px;">
+    <div style="padding:8px 20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:100px;font-size:11px;color:rgba(255,255,255,0.25);letter-spacing:.08em;">Skip Calibration</div>
+    <div style="padding:8px 20px;background:rgba(110,60,220,0.15);border:1px solid rgba(160,120,255,0.25);border-radius:100px;font-size:11px;color:rgba(160,120,255,0.7);letter-spacing:.08em;">2 of 5 Stimuli Complete</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 3 — SENSORY PROFILE REVEAL
+════════════════════════════════════════════ -->
+<div>
+<div class="frame-label">03 — Sensory Profile Reveal</div>
+<div class="screen s3">
+  <div class="s3-header">
+    <h1>Your Sensory Signature</h1>
+    <h2>Profile Complete</h2>
+    <p>8 dimensions · unique to you</p>
+  </div>
+
+  <!-- Radar Chart -->
+  <div class="s3-chart-wrap">
+    <svg width="560" height="560" viewBox="0 0 560 560">
+      <defs>
+        <radialGradient id="radarGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="rgba(160,120,255,0.55)"/>
+          <stop offset="100%" stop-color="rgba(56,189,248,0.2)"/>
+        </radialGradient>
+        <filter id="glow-r">
+          <feGaussianBlur stdDeviation="4" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Grid octagons -->
+      <polygon points="280,80 426,154 480,300 426,446 280,520 134,446 80,300 134,154" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <polygon points="280,130 396,192 440,300 396,408 280,470 164,408 120,300 164,192" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+      <polygon points="280,180 366,230 400,300 366,370 280,420 194,370 160,300 194,230" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+      <polygon points="280,230 336,268 360,300 336,332 280,370 224,332 200,300 224,268" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+
+      <!-- Axis lines -->
+      <line x1="280" y1="280" x2="280" y2="80" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <line x1="280" y1="280" x2="426" y2="154" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <line x1="280" y1="280" x2="480" y2="300" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <line x1="280" y1="280" x2="426" y2="446" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <line x1="280" y1="280" x2="280" y2="520" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <line x1="280" y1="280" x2="134" y2="446" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <line x1="280" y1="280" x2="80" y2="300" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <line x1="280" y1="280" x2="134" y2="154" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <!-- Data polygon (values: VL=65%, AP=82%, TR=45%, SD=72%, EC=58%, FI=35%, RR=28%, ME=48%) -->
+      <!-- Angles: 0=top(-90°), then +45° each -->
+      <!-- VL 65%: (280, 280-200*0.65) = (280,150) -->
+      <!-- AP 82%: (280+200*0.82*sin45°, 280-200*0.82*cos45°) = (280+115.9, 280-115.9) = (395.9,164.1) -->
+      <!-- TR 45%: (280+200*0.45, 280) = (370,280) -->
+      <!-- SD 72%: (280+200*0.72*sin45°, 280+200*0.72*cos45°) = (280+101.8, 280+101.8) = (381.8,381.8) -->
+      <!-- EC 58%: (280, 280+200*0.58) = (280,396) -->
+      <!-- FI 35%: (280-200*0.35*sin45°, 280+200*0.35*cos45°) = (280-49.5, 280+49.5) = (230.5,329.5) -->
+      <!-- RR 28%: (280-200*0.28, 280) = (224,280) -->
+      <!-- ME 48%: (280-200*0.48*sin45°, 280-200*0.48*cos45°) = (280-67.9,280-67.9) = (212.1,212.1) -->
+      <polygon
+        points="280,150 395.9,164.1 370,280 381.8,381.8 280,396 230.5,329.5 224,280 212.1,212.1"
+        fill="url(#radarGrad)"
+        stroke="rgba(160,120,255,0.7)"
+        stroke-width="1.5"
+        filter="url(#glow-r)"
+      />
+
+      <!-- Data point dots -->
+      <circle cx="280" cy="150" r="5" fill="#C084FC" filter="url(#glow-r)"/>
+      <circle cx="395.9" cy="164.1" r="5" fill="#EF4444" filter="url(#glow-r)"/>
+      <circle cx="370" cy="280" r="5" fill="#A78BFA" filter="url(#glow-r)"/>
+      <circle cx="381.8" cy="381.8" r="5" fill="#EC4899" filter="url(#glow-r)"/>
+      <circle cx="280" cy="396" r="5" fill="#FCD34D" filter="url(#glow-r)"/>
+      <circle cx="230.5" cy="329.5" r="5" fill="#2DD4BF" filter="url(#glow-r)"/>
+      <circle cx="224" cy="280" r="5" fill="#818CF8" filter="url(#glow-r)"/>
+      <circle cx="212.1" cy="212.1" r="5" fill="#A855F7" filter="url(#glow-r)"/>
+
+      <!-- Labels -->
+      <text x="280" y="68" text-anchor="middle" fill="rgba(192,132,252,0.8)" font-size="11" font-family="-apple-system,system-ui,sans-serif" font-weight="600" letter-spacing="0.08em">VISUAL LOAD</text>
+      <text x="430" y="148" text-anchor="start" fill="rgba(239,68,68,0.8)" font-size="11" font-family="-apple-system,system-ui,sans-serif" font-weight="600" letter-spacing="0.08em">AUDITORY</text>
+      <text x="498" y="305" text-anchor="start" fill="rgba(167,139,250,0.8)" font-size="11" font-family="-apple-system,system-ui,sans-serif" font-weight="600" letter-spacing="0.08em">TOUCH</text>
+      <text x="440" y="462" text-anchor="start" fill="rgba(236,72,153,0.8)" font-size="11" font-family="-apple-system,system-ui,sans-serif" font-weight="600" letter-spacing="0.08em">SOCIAL</text>
+      <text x="280" y="544" text-anchor="middle" fill="rgba(252,211,77,0.8)" font-size="11" font-family="-apple-system,system-ui,sans-serif" font-weight="600" letter-spacing="0.08em">EMOTIONAL</text>
+      <text x="64" y="462" text-anchor="end" fill="rgba(45,212,191,0.8)" font-size="11" font-family="-apple-system,system-ui,sans-serif" font-weight="600" letter-spacing="0.08em">FOCUS</text>
+      <text x="60" y="305" text-anchor="end" fill="rgba(129,140,248,0.8)" font-size="11" font-family="-apple-system,system-ui,sans-serif" font-weight="600" letter-spacing="0.08em">RECOVERY</text>
+      <text x="92" y="148" text-anchor="end" fill="rgba(168,85,247,0.8)" font-size="11" font-family="-apple-system,system-ui,sans-serif" font-weight="600" letter-spacing="0.08em">MEMORY</text>
+    </svg>
+  </div>
+
+  <!-- Stat list -->
+  <div class="s3-stats">
+    <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:4px;">Dimension Scores</div>
+    <div class="s3-stat-row"><div class="s3-stat-dot" style="background:#C084FC;box-shadow:0 0 8px #C084FC"></div><div class="s3-stat-info"><div class="s3-stat-name">Visual Load</div><div class="s3-stat-bar-wrap"><div class="s3-stat-bar" style="width:65%;background:linear-gradient(90deg,#7C3AED,#C084FC)"></div></div></div><div class="s3-stat-val" style="color:#C084FC">65</div></div>
+    <div class="s3-stat-row"><div class="s3-stat-dot" style="background:#EF4444;box-shadow:0 0 8px #EF4444"></div><div class="s3-stat-info"><div class="s3-stat-name">Auditory Pressure</div><div class="s3-stat-bar-wrap"><div class="s3-stat-bar" style="width:82%;background:linear-gradient(90deg,#DC2626,#EF4444)"></div></div></div><div class="s3-stat-val" style="color:#EF4444">82</div></div>
+    <div class="s3-stat-row"><div class="s3-stat-dot" style="background:#A78BFA;box-shadow:0 0 8px #A78BFA"></div><div class="s3-stat-info"><div class="s3-stat-name">Touch Reactivity</div><div class="s3-stat-bar-wrap"><div class="s3-stat-bar" style="width:45%;background:linear-gradient(90deg,#6D28D9,#A78BFA)"></div></div></div><div class="s3-stat-val" style="color:#A78BFA">45</div></div>
+    <div class="s3-stat-row"><div class="s3-stat-dot" style="background:#EC4899;box-shadow:0 0 8px #EC4899"></div><div class="s3-stat-info"><div class="s3-stat-name">Social Density</div><div class="s3-stat-bar-wrap"><div class="s3-stat-bar" style="width:72%;background:linear-gradient(90deg,#BE185D,#EC4899)"></div></div></div><div class="s3-stat-val" style="color:#EC4899">72</div></div>
+    <div class="s3-stat-row"><div class="s3-stat-dot" style="background:#FCD34D;box-shadow:0 0 8px #FCD34D"></div><div class="s3-stat-info"><div class="s3-stat-name">Emotional Charge</div><div class="s3-stat-bar-wrap"><div class="s3-stat-bar" style="width:58%;background:linear-gradient(90deg,#D97706,#FCD34D)"></div></div></div><div class="s3-stat-val" style="color:#FCD34D">58</div></div>
+    <div class="s3-stat-row"><div class="s3-stat-dot" style="background:#2DD4BF;box-shadow:0 0 8px #2DD4BF"></div><div class="s3-stat-info"><div class="s3-stat-name">Focus Integrity</div><div class="s3-stat-bar-wrap"><div class="s3-stat-bar" style="width:35%;background:linear-gradient(90deg,#0F766E,#2DD4BF)"></div></div></div><div class="s3-stat-val" style="color:#2DD4BF">35</div></div>
+    <div class="s3-stat-row"><div class="s3-stat-dot" style="background:#818CF8;box-shadow:0 0 8px #818CF8"></div><div class="s3-stat-info"><div class="s3-stat-name">Recovery Reserve</div><div class="s3-stat-bar-wrap"><div class="s3-stat-bar" style="width:28%;background:linear-gradient(90deg,#3730A3,#818CF8)"></div></div></div><div class="s3-stat-val" style="color:#818CF8">28</div></div>
+    <div class="s3-stat-row"><div class="s3-stat-dot" style="background:#A855F7;box-shadow:0 0 8px #A855F7"></div><div class="s3-stat-info"><div class="s3-stat-name">Memory Echo</div><div class="s3-stat-bar-wrap"><div class="s3-stat-bar" style="width:48%;background:linear-gradient(90deg,#7E22CE,#A855F7)"></div></div></div><div class="s3-stat-val" style="color:#A855F7">48</div></div>
+  </div>
+
+  <div class="s3-complete">
+    <div class="s3-check"></div>
+    Profile Generated
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 4 — LIVE AR FIELD (HERO)
+════════════════════════════════════════════ -->
+<div>
+<div class="frame-label">04 — Live AR Field · Hero Screen</div>
+<div class="screen s4">
+  <div class="s4-env"></div>
+  <div class="s4-grid"></div>
+
+  <!-- HUD top bar -->
+  <div class="s4-hud-top">
+    <div class="s4-logo">SENSEVEIL</div>
+    <div class="s4-coherence-badge">
+      <div>
+        <div class="s4-coh-label">Coherence Score</div>
+      </div>
+      <div class="s4-coh-score">41</div>
+      <div class="s4-coh-unit">/ 100</div>
+    </div>
+    <div class="s4-time">14:32 &nbsp;·&nbsp; Thursday</div>
+  </div>
+
+  <!-- Sensory Field SVG — the centerpiece -->
+  <div class="s4-field">
+    <svg width="900" height="760" viewBox="0 0 900 760" style="overflow:visible;">
+      <defs>
+        <filter id="glow1"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="glow2"><feGaussianBlur stdDeviation="16" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="glow3"><feGaussianBlur stdDeviation="28" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <radialGradient id="orbGrad" cx="40%" cy="35%" r="65%">
+          <stop offset="0%" stop-color="rgba(200,160,255,0.95)"/>
+          <stop offset="40%" stop-color="rgba(120,60,220,0.9)"/>
+          <stop offset="100%" stop-color="rgba(30,10,80,0.98)"/>
+        </radialGradient>
+
+        <!-- Ring arc patterns — stroke-dasharray trick -->
+        <!-- Circumference = 2πr -->
+        <!-- Ring 1 r=110: C=691.2  82% = 566.8 filled -->
+        <!-- Ring 2 r=150: C=942.5  68% = 640.9 filled -->
+        <!-- Ring 3 r=190: C=1193.8 45% = 537.2 filled -->
+        <!-- Ring 4 r=230: C=1445.1 75% = 1083.8 filled -->
+        <!-- Ring 5 r=270: C=1696.5 58% = 984.0 filled -->
+        <!-- Ring 6 r=310: C=1947.8 35% = 681.7 filled -->
+        <!-- Ring 7 r=350: C=2199.1 28% = 615.7 filled -->
+        <!-- Ring 8 r=390: C=2450.4 48% = 1176.2 filled -->
+      </defs>
+
+      <!-- Background glow -->
+      <circle cx="450" cy="380" r="420" fill="radial-gradient" opacity="0"/>
+      <circle cx="450" cy="380" r="360" fill="rgba(60,30,120,0.08)" filter="url(#glow3)"/>
+
+      <!-- Ring 8 — Memory Echo — purple — 48% -->
+      <circle cx="450" cy="380" r="390" fill="none" stroke="rgba(168,85,247,0.1)" stroke-width="1"/>
+      <circle cx="450" cy="380" r="390" fill="none" stroke="rgba(168,85,247,0.55)" stroke-width="2"
+        stroke-dasharray="1176.2 1274.2" stroke-dashoffset="612.6" stroke-linecap="round"
+        style="animation:ring-breathe 7s ease-in-out infinite 0.8s" filter="url(#glow1)"/>
+
+      <!-- Ring 7 — Recovery Reserve — indigo — 28% -->
+      <circle cx="450" cy="380" r="350" fill="none" stroke="rgba(99,102,241,0.1)" stroke-width="1"/>
+      <circle cx="450" cy="380" r="350" fill="none" stroke="rgba(99,102,241,0.6)" stroke-width="2"
+        stroke-dasharray="615.7 1583.4" stroke-dashoffset="549.7" stroke-linecap="round"
+        style="animation:ring-breathe 6s ease-in-out infinite 0.3s" filter="url(#glow1)"/>
+
+      <!-- Ring 6 — Focus Integrity — teal — 35% -->
+      <circle cx="450" cy="380" r="310" fill="none" stroke="rgba(20,184,166,0.1)" stroke-width="1"/>
+      <circle cx="450" cy="380" r="310" fill="none" stroke="rgba(20,184,166,0.65)" stroke-width="2.5"
+        stroke-dasharray="681.7 1266.1" stroke-dashoffset="486.8" stroke-linecap="round"
+        style="animation:ring-breathe 5s ease-in-out infinite 0.6s" filter="url(#glow1)"/>
+
+      <!-- Ring 5 — Emotional Charge — gold — 58% -->
+      <circle cx="450" cy="380" r="270" fill="none" stroke="rgba(217,119,6,0.1)" stroke-width="1"/>
+      <circle cx="450" cy="380" r="270" fill="none" stroke="rgba(252,211,77,0.65)" stroke-width="2.5"
+        stroke-dasharray="984.0 712.5" stroke-dashoffset="424.0" stroke-linecap="round"
+        style="animation:ring-breathe 5.5s ease-in-out infinite" filter="url(#glow1)"/>
+
+      <!-- Ring 4 — Social Density — coral — 75% -->
+      <circle cx="450" cy="380" r="230" fill="none" stroke="rgba(220,38,38,0.1)" stroke-width="1"/>
+      <circle cx="450" cy="380" r="230" fill="none" stroke="rgba(248,113,113,0.7)" stroke-width="3"
+        stroke-dasharray="1083.8 361.3" stroke-dashoffset="361.3" stroke-linecap="round"
+        style="animation:ring-breathe 4.5s ease-in-out infinite 0.4s" filter="url(#glow1)"/>
+
+      <!-- Ring 3 — Touch Reactivity — violet — 45% -->
+      <circle cx="450" cy="380" r="190" fill="none" stroke="rgba(124,58,237,0.1)" stroke-width="1"/>
+      <circle cx="450" cy="380" r="190" fill="none" stroke="rgba(167,139,250,0.7)" stroke-width="2.5"
+        stroke-dasharray="537.2 656.6" stroke-dashoffset="298.7" stroke-linecap="round"
+        style="animation:ring-breathe 6.5s ease-in-out infinite 0.9s" filter="url(#glow1)"/>
+
+      <!-- Ring 2 — Auditory Pressure — red-orange — 82% -->
+      <circle cx="450" cy="380" r="150" fill="none" stroke="rgba(234,88,12,0.1)" stroke-width="1"/>
+      <circle cx="450" cy="380" r="150" fill="none" stroke="rgba(251,146,60,0.75)" stroke-width="3"
+        stroke-dasharray="772.8 169.6" stroke-dashoffset="235.6" stroke-linecap="round"
+        style="animation:ring-breathe 3.5s ease-in-out infinite 0.1s" filter="url(#glow2)"/>
+
+      <!-- Ring 1 — Visual Load — amber — 65% -->
+      <circle cx="450" cy="380" r="110" fill="none" stroke="rgba(217,119,6,0.12)" stroke-width="1"/>
+      <circle cx="450" cy="380" r="110" fill="none" stroke="rgba(252,211,77,0.8)" stroke-width="3"
+        stroke-dasharray="449.3 241.9" stroke-dashoffset="172.9" stroke-linecap="round"
+        style="animation:ring-breathe 4s ease-in-out infinite 0.2s" filter="url(#glow2)"/>
+
+      <!-- Central coherence orb -->
+      <circle cx="450" cy="380" r="72" fill="rgba(40,20,100,0.5)" filter="url(#glow3)"/>
+      <circle cx="450" cy="380" r="60" fill="url(#orbGrad)" filter="url(#glow2)"/>
+      <circle cx="450" cy="380" r="60" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <!-- orb inner highlight -->
+      <ellipse cx="435" cy="360" rx="20" ry="16" fill="rgba(255,255,255,0.12)"/>
+
+      <!-- Score text inside orb -->
+      <text x="450" y="374" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="26" font-weight="700" font-family="-apple-system,system-ui,sans-serif">41</text>
+      <text x="450" y="394" text-anchor="middle" fill="rgba(255,255,255,0.35)" font-size="9" font-weight="600" font-family="-apple-system,system-ui,sans-serif" letter-spacing="0.1em">COHERENCE</text>
+
+      <!-- Hotspot: Crowd cluster -->
+      <circle cx="660" cy="520" r="6" fill="rgba(248,113,113,0.9)" filter="url(#glow1)" style="animation:pulse 2.5s ease-in-out infinite"/>
+      <line x1="660" y1="520" x2="660" y2="490" stroke="rgba(248,113,113,0.3)" stroke-width="1" stroke-dasharray="3 3"/>
+
+      <!-- Hotspot: Sound zone -->
+      <circle cx="220" cy="460" r="6" fill="rgba(251,146,60,0.9)" filter="url(#glow1)" style="animation:pulse 3s ease-in-out infinite .4s"/>
+      <line x1="220" y1="460" x2="220" y2="430" stroke="rgba(251,146,60,0.3)" stroke-width="1" stroke-dasharray="3 3"/>
+
+      <!-- Hotspot: Light source -->
+      <circle cx="580" cy="200" r="5" fill="rgba(252,211,77,0.85)" filter="url(#glow1)" style="animation:pulse 4s ease-in-out infinite .8s"/>
+
+      <!-- Hotspot: Quiet zone -->
+      <circle cx="180" cy="260" r="5" fill="rgba(45,212,191,0.85)" filter="url(#glow1)" style="animation:pulse 5s ease-in-out infinite .2s"/>
+    </svg>
+  </div>
+
+  <!-- Environment hotspot labels -->
+  <div class="s4-hotspot" style="position:absolute;right:248px;bottom:200px;">
+    <div class="s4-hs-dot" style="color:#F87171;background:#F87171;"></div>
+    <div class="s4-hs-label">Crowd Cluster · Social +24</div>
+  </div>
+  <div class="s4-hotspot" style="position:absolute;left:226px;bottom:245px;">
+    <div class="s4-hs-dot" style="color:#FB923C;background:#FB923C;"></div>
+    <div class="s4-hs-label">HVAC Hum · Auditory +11</div>
+  </div>
+  <div class="s4-hotspot" style="position:absolute;right:336px;top:256px;">
+    <div class="s4-hs-dot" style="color:#FCD34D;background:#FCD34D;"></div>
+    <div class="s4-hs-label">Fluorescent · Visual +18</div>
+  </div>
+  <div class="s4-hotspot" style="position:absolute;left:196px;top:320px;">
+    <div class="s4-hs-dot" style="color:#2DD4BF;background:#2DD4BF;"></div>
+    <div class="s4-hs-label">Quiet Corner · Calm +9</div>
+  </div>
+
+  <!-- Predictive alert -->
+  <div class="s4-predictive">⚡ Auditory pressure rising · Focus integrity falling · Overload likely in 3 min</div>
+
+  <!-- Right status panel -->
+  <div class="s4-status-panel">
+    <div style="font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:4px;">Live Dimensions</div>
+    <div class="s4-dim-row"><div class="s4-dim-color" style="background:#FCD34D;box-shadow:0 0 6px #FCD34D"></div><div class="s4-dim-name">Visual Load</div><div class="s4-dim-val" style="color:#FCD34D">65</div></div>
+    <div class="s4-dim-row" style="border-color:rgba(248,113,113,0.2);background:rgba(220,38,38,0.08)"><div class="s4-dim-color" style="background:#F87171;box-shadow:0 0 6px #F87171"></div><div class="s4-dim-name">Auditory Pressure</div><div class="s4-dim-val" style="color:#F87171">82 ↑</div></div>
+    <div class="s4-dim-row"><div class="s4-dim-color" style="background:#A78BFA;box-shadow:0 0 6px #A78BFA"></div><div class="s4-dim-name">Touch Reactivity</div><div class="s4-dim-val" style="color:#A78BFA">45</div></div>
+    <div class="s4-dim-row" style="border-color:rgba(248,113,113,0.2);background:rgba(220,38,38,0.08)"><div class="s4-dim-color" style="background:#F87171;box-shadow:0 0 6px #F87171"></div><div class="s4-dim-name">Social Density</div><div class="s4-dim-val" style="color:#F87171">72 ↑</div></div>
+    <div class="s4-dim-row"><div class="s4-dim-color" style="background:#FCD34D;box-shadow:0 0 6px #FCD34D"></div><div class="s4-dim-name">Emotional Charge</div><div class="s4-dim-val" style="color:#FCD34D">58</div></div>
+    <div class="s4-dim-row" style="border-color:rgba(234,88,12,0.2);background:rgba(234,88,12,0.08)"><div class="s4-dim-color" style="background:#FB923C;box-shadow:0 0 6px #FB923C"></div><div class="s4-dim-name">Focus Integrity</div><div class="s4-dim-val" style="color:#FB923C">35 ↓</div></div>
+    <div class="s4-dim-row" style="border-color:rgba(234,88,12,0.2);background:rgba(234,88,12,0.08)"><div class="s4-dim-color" style="background:#FB923C;box-shadow:0 0 6px #FB923C"></div><div class="s4-dim-name">Recovery Reserve</div><div class="s4-dim-val" style="color:#FB923C">28 ↓</div></div>
+    <div class="s4-dim-row"><div class="s4-dim-color" style="background:#A855F7;box-shadow:0 0 6px #A855F7"></div><div class="s4-dim-name">Memory Echo</div><div class="s4-dim-val" style="color:#A855F7">48</div></div>
+  </div>
+
+  <!-- Quick actions -->
+  <div class="s4-quick-actions">
+    <div class="s4-qa active">Focus</div>
+    <div class="s4-qa active">Calm</div>
+    <div class="s4-qa">Filter</div>
+    <div class="s4-qa">Recover</div>
+    <div class="s4-qa">Shield</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 5 — DEEP INSPECTION MODE
+════════════════════════════════════════════ -->
+<div>
+<div class="frame-label">05 — Deep Inspection Mode</div>
+<div class="screen s5">
+  <div style="position:absolute;inset:0;background:rgba(4,4,12,0.55);backdrop-filter:blur(2px);"></div>
+
+  <div class="s5-header">
+    <div>
+      <h2>Deep Inspection</h2>
+      <p>Pinch + hold to enter · Tap layer to isolate</p>
+    </div>
+    <div class="s5-close">×</div>
+  </div>
+
+  <!-- Layer list -->
+  <div class="s5-layers">
+    <div class="s5-layer active">
+      <div class="s5-layer-dot" style="background:#F87171;box-shadow:0 0 8px #F87171"></div>
+      <div class="s5-layer-info"><div class="s5-layer-name">Auditory Pressure</div><div class="s5-layer-val">82 — Critical</div></div>
+      <div class="s5-layer-toggle on"></div>
+    </div>
+    <div class="s5-layer">
+      <div class="s5-layer-dot" style="background:#FCD34D;box-shadow:0 0 8px #FCD34D"></div>
+      <div class="s5-layer-info"><div class="s5-layer-name">Visual Load</div><div class="s5-layer-val">65 — Elevated</div></div>
+      <div class="s5-layer-toggle on"></div>
+    </div>
+    <div class="s5-layer">
+      <div class="s5-layer-dot" style="background:#F87171;box-shadow:0 0 8px #F87171"></div>
+      <div class="s5-layer-info"><div class="s5-layer-name">Social Density</div><div class="s5-layer-val">72 — High</div></div>
+      <div class="s5-layer-toggle on"></div>
+    </div>
+    <div class="s5-layer">
+      <div class="s5-layer-dot" style="background:#FCD34D;box-shadow:0 0 8px #FCD34D"></div>
+      <div class="s5-layer-info"><div class="s5-layer-name">Emotional Charge</div><div class="s5-layer-val">58 — Moderate</div></div>
+      <div class="s5-layer-toggle on"></div>
+    </div>
+    <div class="s5-layer">
+      <div class="s5-layer-dot" style="background:#FB923C;box-shadow:0 0 8px #FB923C"></div>
+      <div class="s5-layer-info"><div class="s5-layer-name">Focus Integrity</div><div class="s5-layer-val">35 — Fragmented</div></div>
+      <div class="s5-layer-toggle on"></div>
+    </div>
+    <div class="s5-layer">
+      <div class="s5-layer-dot" style="background:#A78BFA;box-shadow:0 0 8px #A78BFA"></div>
+      <div class="s5-layer-info"><div class="s5-layer-name">Touch Reactivity</div><div class="s5-layer-val">45 — Moderate</div></div>
+      <div class="s5-layer-toggle"></div>
+    </div>
+    <div class="s5-layer">
+      <div class="s5-layer-dot" style="background:#818CF8;box-shadow:0 0 8px #818CF8"></div>
+      <div class="s5-layer-info"><div class="s5-layer-name">Recovery Reserve</div><div class="s5-layer-val">28 — Depleted</div></div>
+      <div class="s5-layer-toggle on"></div>
+    </div>
+    <div class="s5-layer">
+      <div class="s5-layer-dot" style="background:#A855F7;box-shadow:0 0 8px #A855F7"></div>
+      <div class="s5-layer-info"><div class="s5-layer-name">Memory Echo</div><div class="s5-layer-val">48 — Active</div></div>
+      <div class="s5-layer-toggle"></div>
+    </div>
+  </div>
+
+  <!-- Detail view -->
+  <div class="s5-detail">
+    <div class="s5-viz">
+      <div class="s5-viz-label">Auditory Pressure · Live Waveform</div>
+      <svg width="100%" height="100%" viewBox="0 0 700 400" preserveAspectRatio="xMidYMid meet" style="position:absolute;inset:0;">
+        <defs>
+          <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="rgba(234,88,12,0.0)"/>
+            <stop offset="20%" stop-color="rgba(234,88,12,0.8)"/>
+            <stop offset="80%" stop-color="rgba(248,113,113,0.8)"/>
+            <stop offset="100%" stop-color="rgba(248,113,113,0.0)"/>
+          </linearGradient>
+          <linearGradient id="waveArea" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="rgba(234,88,12,0.25)"/>
+            <stop offset="100%" stop-color="rgba(234,88,12,0.0)"/>
+          </linearGradient>
+        </defs>
+        <!-- Grid lines -->
+        <line x1="0" y1="100" x2="700" y2="100" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+        <line x1="0" y1="200" x2="700" y2="200" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <line x1="0" y1="300" x2="700" y2="300" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+
+        <!-- Area fill -->
+        <path d="M0,200 Q35,120 70,160 Q105,90 140,80 Q175,50 210,100 Q245,140 280,90 Q315,60 350,110 Q385,150 420,80 Q455,40 490,100 Q525,160 560,120 Q595,90 630,140 Q665,170 700,200 L700,400 L0,400 Z"
+          fill="url(#waveArea)"/>
+        <!-- Wave line -->
+        <path d="M0,200 Q35,120 70,160 Q105,90 140,80 Q175,50 210,100 Q245,140 280,90 Q315,60 350,110 Q385,150 420,80 Q455,40 490,100 Q525,160 560,120 Q595,90 630,140 Q665,170 700,160"
+          fill="none" stroke="url(#waveGrad)" stroke-width="2"/>
+
+        <!-- Threshold line -->
+        <line x1="0" y1="70" x2="700" y2="70" stroke="rgba(248,113,113,0.3)" stroke-width="1" stroke-dasharray="8 4"/>
+        <text x="14" y="62" fill="rgba(248,113,113,0.5)" font-size="10" font-family="-apple-system,system-ui,sans-serif" letter-spacing="0.06em">CRITICAL THRESHOLD</text>
+
+        <!-- Y axis labels -->
+        <text x="14" y="104" fill="rgba(255,255,255,0.2)" font-size="10" font-family="-apple-system,system-ui,sans-serif">75</text>
+        <text x="14" y="204" fill="rgba(255,255,255,0.2)" font-size="10" font-family="-apple-system,system-ui,sans-serif">50</text>
+        <text x="14" y="304" fill="rgba(255,255,255,0.2)" font-size="10" font-family="-apple-system,system-ui,sans-serif">25</text>
+
+        <!-- Current value indicator -->
+        <circle cx="630" cy="140" r="5" fill="#FB923C" filter="url(#glow1)"/>
+        <line x1="630" y1="140" x2="630" y2="400" stroke="rgba(251,146,60,0.15)" stroke-width="1" stroke-dasharray="4 4"/>
+        <rect x="590" y="118" width="54" height="22" rx="5" fill="rgba(234,88,12,0.3)" stroke="rgba(251,146,60,0.4)" stroke-width="1"/>
+        <text x="617" y="133" text-anchor="middle" fill="#FB923C" font-size="12" font-weight="700" font-family="-apple-system,system-ui,sans-serif">82</text>
+      </svg>
+    </div>
+
+    <div class="s5-insights">
+      <div class="s5-insight">
+        <div class="s5-insight-label">Peak Today</div>
+        <div class="s5-insight-val" style="color:#F87171">94</div>
+        <div class="s5-insight-desc">at 09:47am · lecture hall</div>
+      </div>
+      <div class="s5-insight">
+        <div class="s5-insight-label">Duration Over 70</div>
+        <div class="s5-insight-val" style="color:#FB923C">38 min</div>
+        <div class="s5-insight-desc">today · 22% above baseline</div>
+      </div>
+      <div class="s5-insight">
+        <div class="s5-insight-label">Primary Source</div>
+        <div class="s5-insight-val" style="color:#FCD34D; font-size:16px;">Crowd Speech</div>
+        <div class="s5-insight-desc">layered conversation → 68% contribution</div>
+      </div>
+      <div class="s5-insight">
+        <div class="s5-insight-label">Recovery ETA</div>
+        <div class="s5-insight-val" style="color:#2DD4BF">~14 min</div>
+        <div class="s5-insight-desc">in quiet environment</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 6 — MODULATION STUDIO
+════════════════════════════════════════════ -->
+<div>
+<div class="frame-label">06 — Modulation Studio</div>
+<div class="screen s6">
+  <div class="s6-header">
+    <h2>Modulation Studio</h2>
+    <p>3 active · Neural automation on</p>
+  </div>
+
+  <div class="s6-grid">
+    <!-- Card 1: Auditory Filtering — ACTIVE -->
+    <div class="s6-card active">
+      <div class="s6-card-glow" style="background:#2DD4BF;"></div>
+      <div class="s6-card-icon">🎧</div>
+      <div class="s6-card-title">Auditory Filtering</div>
+      <div class="s6-card-desc">Isolates key voices. Reduces crowd noise, HVAC, and environmental hum.</div>
+      <div class="s6-slider-wrap">
+        <div class="s6-slider-label">INTENSITY</div>
+        <div class="s6-slider"><div class="s6-slider-fill" style="width:72%;background:linear-gradient(90deg,#0F766E,#2DD4BF)"></div></div>
+        <div class="s6-slider-val" style="color:#2DD4BF">72%</div>
+      </div>
+      <div class="s6-toggle-row">
+        <div class="s6-toggle-label">Neural Auto</div>
+        <div class="s6-pill on">On</div>
+      </div>
+    </div>
+
+    <!-- Card 2: Visual Declutter — ACTIVE -->
+    <div class="s6-card active-2">
+      <div class="s6-card-glow" style="background:#818CF8;"></div>
+      <div class="s6-card-icon">👁</div>
+      <div class="s6-card-title">Visual Declutter</div>
+      <div class="s6-card-desc">Softens peripheral clutter, reduces motion blur, dims aggressive colors.</div>
+      <div class="s6-slider-wrap">
+        <div class="s6-slider-label">INTENSITY</div>
+        <div class="s6-slider"><div class="s6-slider-fill" style="width:58%;background:linear-gradient(90deg,#3730A3,#818CF8)"></div></div>
+        <div class="s6-slider-val" style="color:#818CF8">58%</div>
+      </div>
+      <div class="s6-toggle-row">
+        <div class="s6-toggle-label">Neural Auto</div>
+        <div class="s6-pill on">On</div>
+      </div>
+    </div>
+
+    <!-- Card 3: Focus Corridor — ACTIVE -->
+    <div class="s6-card active">
+      <div class="s6-card-glow" style="background:#2DD4BF;"></div>
+      <div class="s6-card-icon">⬛</div>
+      <div class="s6-card-title">Focus Corridor</div>
+      <div class="s6-card-desc">AR tunnel that keeps task-relevant objects vivid while background fades.</div>
+      <div class="s6-slider-wrap">
+        <div class="s6-slider-label">WIDTH</div>
+        <div class="s6-slider"><div class="s6-slider-fill" style="width:45%;background:linear-gradient(90deg,#0F766E,#2DD4BF)"></div></div>
+        <div class="s6-slider-val" style="color:#2DD4BF">45°</div>
+      </div>
+      <div class="s6-toggle-row">
+        <div class="s6-toggle-label">Neural Auto</div>
+        <div class="s6-pill off">Off</div>
+      </div>
+    </div>
+
+    <!-- Card 4: Haptic Breath Sync -->
+    <div class="s6-card">
+      <div class="s6-card-icon">💫</div>
+      <div class="s6-card-title">Haptic Breath Sync</div>
+      <div class="s6-card-desc">Guided breathing via wristband haptics. 4-7-8 or box breathing patterns.</div>
+      <div class="s6-slider-wrap">
+        <div class="s6-slider-label">TEMPO</div>
+        <div class="s6-slider"><div class="s6-slider-fill" style="width:40%;background:linear-gradient(90deg,#4338CA,#A78BFA)"></div></div>
+        <div class="s6-slider-val" style="color:rgba(255,255,255,0.4)">—</div>
+      </div>
+      <div class="s6-toggle-row">
+        <div class="s6-toggle-label">Neural Auto</div>
+        <div class="s6-pill off">Off</div>
+      </div>
+    </div>
+
+    <!-- Card 5: Emotional Grounding -->
+    <div class="s6-card">
+      <div class="s6-card-icon">🌿</div>
+      <div class="s6-card-title">Emotional Grounding</div>
+      <div class="s6-card-desc">Overlays calming spatial visuals anchored to present environment.</div>
+      <div class="s6-slider-wrap">
+        <div class="s6-slider-label">DEPTH</div>
+        <div class="s6-slider"><div class="s6-slider-fill" style="width:30%;background:linear-gradient(90deg,#065F46,#34D399)"></div></div>
+        <div class="s6-slider-val" style="color:rgba(255,255,255,0.4)">—</div>
+      </div>
+      <div class="s6-toggle-row">
+        <div class="s6-toggle-label">Neural Auto</div>
+        <div class="s6-pill off">Off</div>
+      </div>
+    </div>
+
+    <!-- Card 6: Sensory Shield -->
+    <div class="s6-card">
+      <div class="s6-card-icon">🛡</div>
+      <div class="s6-card-title">Sensory Shield</div>
+      <div class="s6-card-desc">Creates a regulated perceptual bubble. Mutes all non-critical stimuli.</div>
+      <div class="s6-slider-wrap">
+        <div class="s6-slider-label">RADIUS</div>
+        <div class="s6-slider"><div class="s6-slider-fill" style="width:0%;background:linear-gradient(90deg,#7E22CE,#A855F7)"></div></div>
+        <div class="s6-slider-val" style="color:rgba(255,255,255,0.4)">—</div>
+      </div>
+      <div class="s6-toggle-row">
+        <div class="s6-toggle-label">Neural Auto</div>
+        <div class="s6-pill off">Off</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 7 — TIMELINE REPLAY
+════════════════════════════════════════════ -->
+<div>
+<div class="frame-label">07 — Timeline Replay · Reflection</div>
+<div class="screen s7">
+  <div class="s7-header">
+    <div>
+      <h2>Today's Sensory Journey</h2>
+      <p>Tap any node to replay full sensory mix at that moment</p>
+    </div>
+    <div class="s7-date">
+      Thursday
+      <span>March 7</span>
+    </div>
+  </div>
+
+  <div class="s7-canvas">
+    <svg width="100%" height="100%" viewBox="0 0 1300 440" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="pathGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="rgba(99,66,179,0.2)"/>
+          <stop offset="50%" stop-color="rgba(99,66,179,0.5)"/>
+          <stop offset="100%" stop-color="rgba(99,66,179,0.2)"/>
+        </linearGradient>
+        <filter id="nodeGlow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+
+      <!-- Background bands -->
+      <rect x="0" y="0" width="1300" height="120" fill="rgba(220,38,38,0.03)"/>
+      <rect x="0" y="120" width="1300" height="200" fill="rgba(99,66,179,0.02)"/>
+      <rect x="0" y="320" width="1300" height="120" fill="rgba(20,184,166,0.03)"/>
+
+      <!-- Band labels -->
+      <text x="14" y="60" fill="rgba(248,113,113,0.25)" font-size="10" font-family="-apple-system,system-ui,sans-serif" font-weight="600" letter-spacing="0.1em">HIGH LOAD</text>
+      <text x="14" y="220" fill="rgba(255,255,255,0.15)" font-size="10" font-family="-apple-system,system-ui,sans-serif" font-weight="600" letter-spacing="0.1em">MODERATE</text>
+      <text x="14" y="380" fill="rgba(45,212,191,0.25)" font-size="10" font-family="-apple-system,system-ui,sans-serif" font-weight="600" letter-spacing="0.1em">CALM</text>
+
+      <!-- Timeline path -->
+      <path d="M80,380 C120,370 160,340 200,300 C240,260 250,160 290,100 C330,60 360,80 400,100 C440,120 450,160 480,180 C510,200 530,200 560,200 C590,200 610,180 640,140 C670,100 680,80 710,90 C740,100 760,180 800,240 C840,300 850,340 880,360 C910,380 930,360 960,320 C990,280 1010,200 1040,180 C1070,160 1090,190 1120,220 C1150,250 1170,320 1200,360 C1220,380 1240,390 1260,390" fill="none" stroke="url(#pathGrad)" stroke-width="2"/>
+
+      <!-- Time axis -->
+      <line x1="80" y1="420" x2="1260" y2="420" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+      <text x="80" y="435" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="10" font-family="-apple-system,system-ui,sans-serif">7am</text>
+      <text x="262" y="435" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="10" font-family="-apple-system,system-ui,sans-serif">9am</text>
+      <text x="444" y="435" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="10" font-family="-apple-system,system-ui,sans-serif">11am</text>
+      <text x="626" y="435" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="10" font-family="-apple-system,system-ui,sans-serif">1pm</text>
+      <text x="808" y="435" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="10" font-family="-apple-system,system-ui,sans-serif">3pm</text>
+      <text x="990" y="435" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="10" font-family="-apple-system,system-ui,sans-serif">5pm</text>
+      <text x="1172" y="435" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="10" font-family="-apple-system,system-ui,sans-serif">7pm</text>
+
+      <!-- RED nodes — Overload -->
+      <circle cx="290" cy="100" r="10" fill="rgba(220,38,38,0.3)" filter="url(#nodeGlow)"/>
+      <circle cx="290" cy="100" r="6" fill="#EF4444" filter="url(#nodeGlow)"/>
+      <line x1="290" y1="88" x2="290" y2="58" stroke="rgba(239,68,68,0.3)" stroke-width="1"/>
+      <rect x="220" y="36" width="140" height="34" rx="6" fill="rgba(220,38,38,0.2)" stroke="rgba(239,68,68,0.3)" stroke-width="1"/>
+      <text x="290" y="52" text-anchor="middle" fill="#F87171" font-size="10" font-family="-apple-system,system-ui,sans-serif" font-weight="600">Overload · 9:47am</text>
+      <text x="290" y="65" text-anchor="middle" fill="rgba(248,113,113,0.6)" font-size="9" font-family="-apple-system,system-ui,sans-serif">Lecture Hall · Score 18</text>
+
+      <circle cx="710" cy="90" r="10" fill="rgba(220,38,38,0.3)" filter="url(#nodeGlow)"/>
+      <circle cx="710" cy="90" r="6" fill="#EF4444" filter="url(#nodeGlow)"/>
+      <line x1="710" y1="78" x2="710" y2="48" stroke="rgba(239,68,68,0.3)" stroke-width="1"/>
+      <rect x="642" y="26" width="136" height="34" rx="6" fill="rgba(220,38,38,0.2)" stroke="rgba(239,68,68,0.3)" stroke-width="1"/>
+      <text x="710" y="42" text-anchor="middle" fill="#F87171" font-size="10" font-family="-apple-system,system-ui,sans-serif" font-weight="600">Overload · 1:14pm</text>
+      <text x="710" y="55" text-anchor="middle" fill="rgba(248,113,113,0.6)" font-size="9" font-family="-apple-system,system-ui,sans-serif">Cafeteria · Score 23</text>
+
+      <!-- GOLD nodes — Peak Focus -->
+      <circle cx="560" cy="200" r="10" fill="rgba(217,119,6,0.3)" filter="url(#nodeGlow)"/>
+      <circle cx="560" cy="200" r="6" fill="#FCD34D" filter="url(#nodeGlow)"/>
+      <line x1="560" y1="212" x2="560" y2="242" stroke="rgba(252,211,77,0.3)" stroke-width="1"/>
+      <rect x="492" y="242" width="136" height="34" rx="6" fill="rgba(217,119,6,0.15)" stroke="rgba(252,211,77,0.3)" stroke-width="1"/>
+      <text x="560" y="258" text-anchor="middle" fill="#FCD34D" font-size="10" font-family="-apple-system,system-ui,sans-serif" font-weight="600">Peak Focus · 11:22am</text>
+      <text x="560" y="271" text-anchor="middle" fill="rgba(252,211,77,0.6)" font-size="9" font-family="-apple-system,system-ui,sans-serif">Library · Score 91</text>
+
+      <circle cx="1040" cy="180" r="10" fill="rgba(217,119,6,0.3)" filter="url(#nodeGlow)"/>
+      <circle cx="1040" cy="180" r="6" fill="#FCD34D" filter="url(#nodeGlow)"/>
+
+      <!-- SILVER nodes — Recovery -->
+      <circle cx="480" cy="180" r="8" fill="rgba(148,163,184,0.3)" filter="url(#nodeGlow)"/>
+      <circle cx="480" cy="180" r="5" fill="rgba(203,213,225,0.9)" filter="url(#nodeGlow)"/>
+
+      <circle cx="880" cy="360" r="10" fill="rgba(100,116,139,0.3)" filter="url(#nodeGlow)"/>
+      <circle cx="880" cy="360" r="6" fill="rgba(203,213,225,0.9)" filter="url(#nodeGlow)"/>
+      <line x1="880" y1="372" x2="880" y2="402" stroke="rgba(203,213,225,0.2)" stroke-width="1"/>
+      <rect x="818" y="396" width="124" height="34" rx="6" fill="rgba(100,116,139,0.15)" stroke="rgba(203,213,225,0.2)" stroke-width="1"/>
+      <text x="880" y="412" text-anchor="middle" fill="rgba(203,213,225,0.7)" font-size="10" font-family="-apple-system,system-ui,sans-serif" font-weight="600">Recovery · 3:28pm</text>
+      <text x="880" y="425" text-anchor="middle" fill="rgba(203,213,225,0.4)" font-size="9" font-family="-apple-system,system-ui,sans-serif">Park · Score 74</text>
+
+      <!-- Current time indicator -->
+      <line x1="1100" y1="0" x2="1100" y2="420" stroke="rgba(160,120,255,0.3)" stroke-width="1" stroke-dasharray="4 4"/>
+      <text x="1100" y="14" text-anchor="middle" fill="rgba(160,120,255,0.6)" font-size="10" font-family="-apple-system,system-ui,sans-serif" font-weight="600" letter-spacing="0.08em">NOW</text>
+    </svg>
+  </div>
+
+  <div class="s7-insights">
+    <div class="s7-insight-chip">
+      <div class="s7-ic-label">Focus Environment</div>
+      <div class="s7-ic-text">"Strongest focus in warm, low-clutter spaces. Library +38% vs open office."</div>
+    </div>
+    <div class="s7-insight-chip">
+      <div class="s7-ic-label">Social Load Pattern</div>
+      <div class="s7-ic-text">"Groups of 5+ consistently spike auditory pressure above threshold."</div>
+    </div>
+    <div class="s7-insight-chip">
+      <div class="s7-ic-label">Cafe Productivity</div>
+      <div class="s7-ic-text">"Productive for ~22 min before overload begins. Best before 11am."</div>
+    </div>
+    <div class="s7-insight-chip">
+      <div class="s7-ic-label">Recovery Signal</div>
+      <div class="s7-ic-text">"Natural light + open space reduces load 34% faster than indoor rest."</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 8 — COLLECTIVE MODE
+════════════════════════════════════════════ -->
+<div>
+<div class="frame-label">08 — Collective Mode · Shared Space</div>
+<div class="screen s8">
+  <div class="s8-header">
+    <div>
+      <h2>Collective Mode</h2>
+      <p>Team Room · 4 members · Wednesday 10am standup</p>
+    </div>
+    <div class="s8-group-score">
+      <div class="s8-gs-label">Group Coherence</div>
+      <div class="s8-gs-val">67</div>
+      <div class="s8-gs-sub">↑ 12 since session start</div>
+    </div>
+  </div>
+
+  <!-- Collective field visualization -->
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-48%);">
+    <svg width="900" height="500" viewBox="0 0 900 500">
+      <defs>
+        <radialGradient id="fieldShared" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="rgba(45,212,191,0.18)"/>
+          <stop offset="60%" stop-color="rgba(67,56,202,0.1)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <filter id="sg"><feGaussianBlur stdDeviation="12" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+
+      <!-- Shared group field -->
+      <ellipse cx="450" cy="250" rx="360" ry="200" fill="url(#fieldShared)"/>
+      <ellipse cx="450" cy="250" rx="360" ry="200" fill="none" stroke="rgba(45,212,191,0.15)" stroke-width="1"/>
+      <ellipse cx="450" cy="250" rx="280" ry="155" fill="none" stroke="rgba(45,212,191,0.08)" stroke-width="1"/>
+
+      <!-- Person 1 — calm (teal) -->
+      <circle cx="200" cy="250" r="44" fill="rgba(20,184,166,0.12)" stroke="rgba(45,212,191,0.4)" stroke-width="1.5" filter="url(#sg)"/>
+      <circle cx="200" cy="230" r="18" fill="rgba(20,184,166,0.3)" stroke="rgba(45,212,191,0.5)" stroke-width="1"/>
+      <rect x="188" y="252" width="24" height="36" rx="8" fill="rgba(20,184,166,0.2)" stroke="rgba(45,212,191,0.4)" stroke-width="1"/>
+      <text x="200" y="310" text-anchor="middle" fill="rgba(45,212,191,0.7)" font-size="11" font-family="-apple-system,system-ui,sans-serif" font-weight="600">ALEX · 78</text>
+
+      <!-- Person 2 — elevated (amber) -->
+      <circle cx="380" cy="180" r="52" fill="rgba(234,88,12,0.1)" stroke="rgba(251,146,60,0.4)" stroke-width="1.5" filter="url(#sg)"/>
+      <circle cx="380" cy="158" r="18" fill="rgba(234,88,12,0.3)" stroke="rgba(251,146,60,0.5)" stroke-width="1"/>
+      <rect x="368" y="180" width="24" height="36" rx="8" fill="rgba(234,88,12,0.2)" stroke="rgba(251,146,60,0.4)" stroke-width="1"/>
+      <text x="380" y="248" text-anchor="middle" fill="rgba(251,146,60,0.7)" font-size="11" font-family="-apple-system,system-ui,sans-serif" font-weight="600">MAYA · 52</text>
+
+      <!-- Person 3 — moderate (indigo) -->
+      <circle cx="520" cy="300" r="48" fill="rgba(67,56,202,0.1)" stroke="rgba(129,140,248,0.4)" stroke-width="1.5" filter="url(#sg)"/>
+      <circle cx="520" cy="278" r="18" fill="rgba(67,56,202,0.3)" stroke="rgba(129,140,248,0.5)" stroke-width="1"/>
+      <rect x="508" y="300" width="24" height="36" rx="8" fill="rgba(67,56,202,0.2)" stroke="rgba(129,140,248,0.4)" stroke-width="1"/>
+      <text x="520" y="368" text-anchor="middle" fill="rgba(129,140,248,0.7)" font-size="11" font-family="-apple-system,system-ui,sans-serif" font-weight="600">RYAN · 71</text>
+
+      <!-- Person 4 — overloaded (red) -->
+      <circle cx="700" cy="220" r="56" fill="rgba(220,38,38,0.1)" stroke="rgba(248,113,113,0.4)" stroke-width="1.5" filter="url(#sg)" style="animation:ring-breathe 3s ease-in-out infinite"/>
+      <circle cx="700" cy="196" r="18" fill="rgba(220,38,38,0.3)" stroke="rgba(248,113,113,0.5)" stroke-width="1"/>
+      <rect x="688" y="218" width="24" height="36" rx="8" fill="rgba(220,38,38,0.2)" stroke="rgba(248,113,113,0.4)" stroke-width="1"/>
+      <text x="700" y="294" text-anchor="middle" fill="rgba(248,113,113,0.7)" font-size="11" font-family="-apple-system,system-ui,sans-serif" font-weight="600">CHEN · 41</text>
+      <text x="700" y="308" text-anchor="middle" fill="rgba(248,113,113,0.45)" font-size="9" font-family="-apple-system,system-ui,sans-serif">⚡ Overloaded</text>
+
+      <!-- Connection threads -->
+      <line x1="218" y1="250" x2="362" y2="200" stroke="rgba(45,212,191,0.2)" stroke-width="1" stroke-dasharray="6 4"/>
+      <line x1="398" y1="220" x2="502" y2="280" stroke="rgba(129,140,248,0.2)" stroke-width="1" stroke-dasharray="6 4"/>
+      <line x1="538" y1="280" x2="682" y2="250" stroke="rgba(248,113,113,0.2)" stroke-width="1" stroke-dasharray="6 4"/>
+    </svg>
+  </div>
+
+  <!-- Recommendations panel -->
+  <div class="s8-rec">
+    <div class="s8-rec-title">Room Recommendations</div>
+    <div class="s8-rec-item">
+      <div class="s8-rec-dot" style="background:#2DD4BF"></div>
+      <div class="s8-rec-text">Reduce HVAC noise — acoustic fatigue +18 for all members</div>
+    </div>
+    <div class="s8-rec-item">
+      <div class="s8-rec-dot" style="background:#F87171"></div>
+      <div class="s8-rec-text">Chen shows overload — consider 5 min break before key discussion</div>
+    </div>
+    <div class="s8-rec-item">
+      <div class="s8-rec-dot" style="background:#FCD34D"></div>
+      <div class="s8-rec-text">Fluorescent light creates visual strain — dimming recommended</div>
+    </div>
+    <div class="s8-rec-item">
+      <div class="s8-rec-dot" style="background:#818CF8"></div>
+      <div class="s8-rec-text">Group attention drops in 8 min — energy mismatch rising</div>
+    </div>
+  </div>
+
+  <!-- Bottom metrics -->
+  <div class="s8-grid-bottom">
+    <div class="s8-metric">
+      <div class="s8-m-label">Group Calm</div>
+      <div class="s8-m-val" style="color:#2DD4BF">67</div>
+      <div class="s8-m-desc">↑ from 55 at session start</div>
+    </div>
+    <div class="s8-metric">
+      <div class="s8-m-label">Energy Mismatch</div>
+      <div class="s8-m-val" style="color:#FB923C">34</div>
+      <div class="s8-m-desc">Maya ↔ Chen highest gap</div>
+    </div>
+    <div class="s8-metric">
+      <div class="s8-m-label">Collective Focus</div>
+      <div class="s8-m-val" style="color:#818CF8">58</div>
+      <div class="s8-m-desc">Dropping · 8 min window</div>
+    </div>
+    <div class="s8-metric">
+      <div class="s8-m-label">Acoustic Burden</div>
+      <div class="s8-m-val" style="color:#FCD34D">+18</div>
+      <div class="s8-m-desc">HVAC primary source</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+// Particle generator for Welcome screen
+(function() {
+  const wrap = document.getElementById('particles1');
+  if (!wrap) return;
+  const count = 60;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    const size = Math.random() * 3 + 1;
+    const x = Math.random() * 1440;
+    const y = Math.random() * 900;
+    const dur = (Math.random() * 4 + 3).toFixed(1) + 's';
+    const delay = (Math.random() * 5).toFixed(1) + 's';
+    p.className = 's1-p';
+    p.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px;--d:${dur};--dl:${delay};`;
+    wrap.appendChild(p);
+  }
+})();
+</script>
+</body>
+</html>
